@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora de HOMA-IR</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    h2 {
+      color: #004080;
+    }
+    label, input {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input[type="number"] {
+      padding: 5px;
+      width: 200px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+    .resultado {
+      margin-top: 30px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Calculadora de HOMA-IR</h2>
+
+  <form id="homaForm">
+    <label for="insulina">Insulina de jejum (μU/mL):</label>
+    <input type="number" id="insulina" step="0.01" min="0" required>
+
+    <label for="glicose">Glicemia de jejum (mg/dL):</label>
+    <input type="number" id="glicose" step="0.1" min="0" required>
+
+    <button type="button" onclick="calcularHOMA()">Calcular</button>
+  </form>
+
+  <div class="resultado" id="resultado" style="display:none;"></div>
+
+  <script>
+    function calcularHOMA() {
+      const insulina = parseFloat(document.getElementById('insulina').value);
+      const glicose = parseFloat(document.getElementById('glicose').value);
+
+      if (isNaN(insulina) || isNaN(glicose)) {
+        alert("Por favor, preencha todos os campos corretamente.");
+        return;
+      }
+
+      const homaIR = (insulina * glicose) / 405;
+      let interpretacao = "";
+
+      if (homaIR < 1.0) {
+        interpretacao = "Baixa resistência à insulina";
+      } else if (homaIR >= 1.0 && homaIR <= 2.9) {
+        interpretacao = "Normal";
+      } else {
+        interpretacao = "Alta resistência à insulina";
+      }
+
+      const resultado = document.getElementById("resultado");
+      resultado.innerHTML = `
+        <h3>Resultado:</h3>
+        <p><strong>HOMA-IR:</strong> ${homaIR.toFixed(2)}</p>
+        <p><strong>Classificação:</strong> ${interpretacao}</p>
+      `;
+      resultado.style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
